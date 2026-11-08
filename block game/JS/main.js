@@ -1,47 +1,74 @@
 // Bootstrap — loads textures, constructs the game, wires the UI, shows the menu.
 
+import * as THREE from 'three';
 import { Game } from './game.js';
 import { UI } from './ui.js';
 import { create_atlas_texture } from './textures.js';
 
+function set_status(p, text, color = null) {
+  const fill = document.getElementById('loading-fill');
+  const label = document.getElementById('loading-text');
+  if (fill) fill.style.width = `${Math.round(p * 100)}%`;
+  if (label) {
+    if (text) label.textContent = text;
+    if (color) label.style.color = color;
+    else label.style.color = '';
+  }
+}
+
+function fail(msg) {
+  console.error('[BlockForge boot]', msg);
+  set_status(1, 'Boot failure: ' + msg, '#ef4444');
+  const label = document.getElementById('loading-text');
+  if (label) {
+    label.style.fontSize = '0.78rem';
+    label.style.maxWidth = '80vw';
+    label.style.wordBreak = 'break-word';
+    label.style.whiteSpace = 'pre-wrap';
+  }
+}
+
 async function boot() {
-  const loading_text = document.getElementById('loading-text');
-  const loading_fill = document.getElementById('loading-fill');
+  // Sanity-check: three.js actually resolved
+  if (!THREE || !THREE.WebGLRenderer) {
+    fail('three.js failed to load from CDN. Check network / adblock.');
+    return;
+  }
 
-  const set_progress = (p, text) => {
-    if (loading_fill) loading_fill.style.width = `${Math.round(p * 100)}%`;
-    if (loading_text && text) loading_text.textContent = text;
-  };
-
-  set_progress(0.1, 'Painting voxel textures…');
-
-  // Give the browser a frame to render the loading screen
+  set_status(0.1, 'Painting voxel textures…');
   await new Promise((r) => setTimeout(r, 30));
 
-  // Generate the texture atlas (needs no DOM beyond canvas)
-  create_atlas_texture();
+  try {
+    create_atlas_texture();
+  } catch (e) {
+    fail('texture atlas: ' + e.message);
+    return;
+  }
 
-  set_progress(0.4, 'Starting renderer…');
+  set_status(0.4, 'Starting renderer…');
   await new Promise((r) => setTimeout(r, 30));
 
-  // Construct game + UI
-  const game = new Game();
-  const ui = new UI(game);
-  game.set_ui(ui);
+  let game, ui;
+  try {
+    game = new Game();
+    ui = new UI(game);
+    game.set_ui(ui);
+  } catch (e) {
+    fail('engine init: ' + e.message);
+    console.error(e);
+    return;
+  }
 
-  // Expose for debugging / external hooks
   window.BlockForge = { game, ui };
 
-  set_progress(0.85, 'Wiring UI…');
+  set_status(0.85, 'Wiring UI…');
   await new Promise((r) => setTimeout(r, 40));
 
-  // Show main menu
-  set_progress(1.0, 'Ready.');
+  set_status(1.0, 'Ready.');
   await new Promise((r) => setTimeout(r, 180));
 
   ui.show_screen('main-menu');
 
-  // Wire Esc key
   document.addEventListener('keydown', (e) => {
     if (e.code === 'Escape') {
       if (game.state === 'playing') game.pause_game();
@@ -51,11 +78,10 @@ async function boot() {
   });
 }
 
-boot().catch((err) => {
-  console.error(err);
-  const t = document.getElementById('loading-text');
-  if (t) {
-    t.textContent = 'Failed to start: ' + (err?.message || 'unknown error');
-    t.style.color = '#ef4444';
-  }
+// Give the loading screen one paint frame before starting
+requestAnimationFrame(() => {
+  boot().catch((err) => {
+    fail((err && err.message) ? err.message : String(err));
+    console.error(err);
+  });
 });
