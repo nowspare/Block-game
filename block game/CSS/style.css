@@ -1,0 +1,180 @@
+/* ============================================
+   BlockForge — Global Base Styles
+   ============================================ */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg-dark: #0f0f1e;
+  --bg-panel: #1a1a2e;
+  --bg-panel-light: #252540;
+  --accent: #4ade80;
+  --accent-dark: #22c55e;
+  --accent-glow: rgba(74, 222, 128, 0.35);
+  --text: #e8e8f0;
+  --text-dim: #8a8a9e;
+  --border: rgba(255, 255, 255, 0.08);
+  --danger: #ef4444;
+  --font: 'Segoe UI', 'SF Pro Display', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Courier New', monospace;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg-dark);
+  color: var(--text);
+  font-family: var(--font);
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#game-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  outline: none;
+  cursor: crosshair;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* Screen overlays */
+.screen {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  background: radial-gradient(circle at 50% 40%, rgba(26, 26, 46, 0.85), rgba(15, 15, 30, 0.97));
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  animation: fade-in 0.25s ease-out;
+}
+
+.screen.active {
+  display: flex;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* Logo */
+.logo {
+  font-size: clamp(2.4rem, 6vw, 4rem);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  color: var(--text);
+  text-shadow:
+    0 0 24px var(--accent-glow),
+    0 4px 0 rgba(0, 0, 0, 0.4);
+  line-height: 1;
+}
+
+.logo span {
+  color: var(--accent);
+}
+
+.subtitle {
+  margin-top: 0.5rem;
+  font-size: clamp(0.75rem, 1.5vw, 0.95rem);
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+/* Value badges */
+.value-badge {
+  min-width: 2.6rem;
+  text-align: center;
+  padding: 0.25rem 0.5rem;
+  background: var(--bg-panel-light);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 0.85rem;
+  color: var(--accent);
+  font-family: var(--font-mono);
+}
+
+/* Form inputs */
+input[type="text"],
+input[type="number"],
+select {
+  background: var(--bg-panel-light);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.6rem 0.9rem;
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.2s;
+  width: 100%;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+select:focus {
+  border-color: var(--accent);
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  background: var(--bg-panel-light);
+  border-radius: 3px;
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  background: var(--accent);
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 8px var(--accent-glow);
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  background: var(--accent);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 0 8px var(--accent-glow);
+}
+
+input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+select {
+  cursor: pointer;
+}
+
+select option {
+  background: var(--bg-panel);
+  color: var(--text);
+}
