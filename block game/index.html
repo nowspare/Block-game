@@ -9,6 +9,45 @@
   <link rel="stylesheet" href="css/menu.css">
   <link rel="stylesheet" href="css/game.css">
   <link rel="stylesheet" href="css/responsive.css">
+
+  <!-- Import map must come before any module script -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+  }
+  </script>
+
+  <!-- Surface every error to the loading screen so it is never silent -->
+  <script>
+    window.__boot_errors = [];
+    window.addEventListener('error', function (e) {
+      var msg = (e.error && e.error.message) ? e.error.message : e.message || 'unknown error';
+      var src = e.filename ? (' @ ' + e.filename.split('/').pop() + ':' + e.lineno) : '';
+      window.__boot_errors.push(msg + src);
+      var el = document.getElementById('loading-text');
+      if (el) {
+        el.textContent = 'Error: ' + msg + src;
+        el.style.color = '#ef4444';
+        el.style.fontSize = '0.78rem';
+        el.style.maxWidth = '80vw';
+        el.style.wordBreak = 'break-word';
+      }
+      console.error('[BlockForge]', msg + src);
+    });
+    window.addEventListener('unhandledrejection', function (e) {
+      var msg = e.reason && e.reason.message ? e.reason.message : String(e.reason);
+      window.__boot_errors.push(msg);
+      var el = document.getElementById('loading-text');
+      if (el) {
+        el.textContent = 'Boot failure: ' + msg;
+        el.style.color = '#ef4444';
+      }
+      console.error('[BlockForge promise]', msg);
+    });
+  </script>
 </head>
 <body>
   <canvas id="game-canvas"></canvas>
@@ -111,7 +150,6 @@
     <div id="hotbar" class="hotbar"></div>
     <div id="game-info" class="game-info"></div>
     <div class="hint" id="hint">Click to lock · WASD move · Space jump · LMB break · RMB place · E inventory · Esc pause</div>
-    <!-- Mobile controls (shown only on touch) -->
     <div id="mobile-controls" class="mobile-controls hidden">
       <div id="joystick-base" class="joystick-base">
         <div id="joystick-knob" class="joystick-knob"></div>
@@ -148,14 +186,6 @@
     </div>
   </div>
 
-  <script type="importmap">
-  {
-    "imports": {
-      "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
-      "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
-    }
-  }
-  </script>
   <script type="module" src="js/main.js"></script>
 </body>
 </html>
