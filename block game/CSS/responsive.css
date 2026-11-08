@@ -1,0 +1,142 @@
+/* ============================================
+   BlockForge — Responsive / Mobile
+   ============================================ */
+
+@media (max-width: 640px) {
+  .dialog {
+    padding: 1.5rem;
+    border-radius: 12px;
+  }
+
+  .dialog h2 {
+    font-size: 1.25rem;
+    margin-bottom: 1.1rem;
+  }
+
+  .form-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.4rem;
+  }
+
+  .form-row label {
+    flex: none;
+  }
+
+  .menu-buttons {
+    width: 100%;
+  }
+
+  .logo {
+    font-size: 2.2rem;
+  }
+
+  .hotbar {
+    bottom: 10px;
+    padding: 4px;
+    gap: 3px;
+  }
+
+  .slot {
+    width: 40px;
+    height: 40px;
+  }
+
+  .slot .block-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .hint {
+    font-size: 0.65rem;
+    padding: 0.35rem 0.75rem;
+    bottom: 65px;
+    white-space: normal;
+    text-align: center;
+    max-width: 90vw;
+  }
+
+  .game-info {
+    font-size: 0.7rem;
+    padding: 0.4rem 0.65rem;
+  }
+
+  .inventory-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+  }
+}
+
+@media (max-width: 400px) {
+  .slot {
+    width: 34px;
+    height: 34px;
+  }
+
+  .slot .block-icon {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+/* Touch devices: show mobile controls */
+@media (hover: none) and (pointer: coarse) {
+  #mobile-controls {
+    display: block;
+  }
+
+  .crosshair {
+    opacity: 0.9;
+  }
+
+  .hint {
+    display: none;
+  }
+}
+
+@media (hover: none) and (pointer: coarse) and (max-width: 640px) {
+  .joystick-base {
+    width: 100px;
+    height: 100px;
+    bottom: 110px;
+    left: 20px;
+  }
+
+  .joystick-knob {
+    width: 42px;
+    height: 42px;
+  }
+
+  .mob-btn {
+    width: 62px;
+    height: 62px;
+    font-size: 0.8rem;
+  }
+
+  .mobile-actions {
+    bottom: 110px;
+    right: 20px;
+  }
+}
+
+/* Landscape mobile */
+@media (hover: none) and (pointer: coarse) and (orientation: landscape) and (max-height: 500px) {
+  .hotbar {
+    bottom: 6px;
+  }
+
+  .joystick-base {
+    bottom: 75px;
+    width: 90px;
+    height: 90px;
+  }
+
+  .mobile-actions {
+    bottom: 75px;
+  }
+
+  .mob-btn {
+    width: 54px;
+    height: 54px;
+  }
+}
